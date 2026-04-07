@@ -81,6 +81,78 @@ public class StudentRepository : IStudentRepository
         await _db.SaveChangesAsync();
         return true;
     }
+
+    public async Task<List<Student>> GetStudentsWithOverdueMembershipsAsync()
+    {
+        return await _db.Students.AsNoTracking()
+            .Where(s => s.Memberships.Any(m => m.Status == MembershipStatus.OVERDUE))
+            .OrderBy(s => s.Name)
+            .ToListAsync();
+    }
+}
+
+public class MembershipRepository : IMembershipRepository
+{
+    private readonly AppDbContext _db;
+    public MembershipRepository(AppDbContext db) => _db = db;
+
+    public async Task<Membership> CreateAsync(Membership membership) { _db.Memberships.Add(membership); await _db.SaveChangesAsync(); return membership; }
+
+    public async Task<List<Membership>> GetAllAsync() =>
+        await _db.Memberships.AsNoTracking()
+            .Include(m => m.Student)
+            .OrderByDescending(m => m.DueDate)
+            .ToListAsync();
+
+    public async Task<Membership?> GetByIdAsync(Guid id) =>
+        await _db.Memberships
+            .Include(m => m.Student)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+    public async Task<List<Membership>> GetByStudentIdAsync(Guid studentId) =>
+        await _db.Memberships.AsNoTracking()
+            .Include(m => m.Student)
+            .Where(m => m.StudentId == studentId)
+            .OrderByDescending(m => m.DueDate)
+            .ToListAsync();
+
+    public async Task<Membership> UpdateAsync(Membership membership) { _db.Memberships.Update(membership); await _db.SaveChangesAsync(); return membership; }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var membership = await _db.Memberships.FindAsync(id);
+        if (membership is null) return false;
+        _db.Memberships.Remove(membership);
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> ExistsByStudentAndMonthAsync(Guid studentId, int year, int month)
+    {
+        return await _db.Memberships.AsNoTracking().AnyAsync(m =>
+            m.StudentId == studentId &&
+            m.DueDate.Year == year &&
+            m.DueDate.Month == month);
+    }
+
+    public async Task<int> UpdateOverdueStatusesAsync(DateTime referenceDate)
+    {
+        var pending = await _db.Memberships
+            .Where(m => m.Status == MembershipStatus.PENDING && m.PaymentDate == null && m.DueDate < referenceDate)
+            .ToListAsync();
+
+        foreach (var membership in pending)
+        {
+            membership.Status = MembershipStatus.OVERDUE;
+        }
+
+        if (pending.Count > 0)
+        {
+            await _db.SaveChangesAsync();
+        }
+
+        return pending.Count;
+    }
 }
 
 public class AttendanceRepository : IAttendanceRepository

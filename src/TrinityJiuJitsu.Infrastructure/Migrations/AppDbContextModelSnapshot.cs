@@ -2,8 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrinityJiuJitsu.Infrastructure.Data;
 
 #nullable disable
@@ -89,14 +87,58 @@ namespace TrinityJiuJitsu.Infrastructure.Migrations
                     b.ToTable("Gyms");
                 });
 
+            modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.Membership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId", "DueDate");
+
+                    b.ToTable("Memberships");
+                });
+
             modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.Student", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Belt")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Degrees")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -137,15 +179,15 @@ namespace TrinityJiuJitsu.Infrastructure.Migrations
 
             modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.Attendance", b =>
                 {
-                    b.HasOne("TrinityJiuJitsu.Domain.Entities.TrainingClass", "TrainingClass")
-                        .WithMany("Attendances")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TrinityJiuJitsu.Domain.Entities.Student", "Student")
                         .WithMany("Attendances")
                         .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TrinityJiuJitsu.Domain.Entities.TrainingClass", "TrainingClass")
+                        .WithMany("Attendances")
+                        .HasForeignKey("ClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -163,6 +205,17 @@ namespace TrinityJiuJitsu.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Gym");
+                });
+
+            modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.Membership", b =>
+                {
+                    b.HasOne("TrinityJiuJitsu.Domain.Entities.Student", "Student")
+                        .WithMany("Memberships")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.TrainingClass", b =>
@@ -189,6 +242,8 @@ namespace TrinityJiuJitsu.Infrastructure.Migrations
             modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.Student", b =>
                 {
                     b.Navigation("Attendances");
+
+                    b.Navigation("Memberships");
                 });
 
             modelBuilder.Entity("TrinityJiuJitsu.Domain.Entities.TrainingClass", b =>

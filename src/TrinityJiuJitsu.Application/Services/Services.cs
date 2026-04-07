@@ -131,27 +131,33 @@ public class StudentService : IStudentService
     private const int MaxDegreesPerBelt = 4;
 
     private readonly IStudentRepository _repo;
-    public StudentService(IStudentRepository repo) => _repo = repo;
+    private readonly IMembershipRepository _membershipRepo;
+    public StudentService(IStudentRepository repo, IMembershipRepository membershipRepo)
+    {
+        _repo = repo;
+        _membershipRepo = membershipRepo;
+    }
 
     public async Task<StudentResponse> CreateAsync(CreateStudentRequest request)
     {
         var student = new Student { Id = Guid.NewGuid(), Name = request.Name };
         await _repo.CreateAsync(student);
-        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.IsActive, student.CreatedAt);
     }
 
     public async Task<List<StudentResponse>> GetAllAsync()
     {
         var list = await _repo.GetAllAsync();
-        return list.Select(s => new StudentResponse(s.Id, s.Name, s.Belt, s.Degrees, s.CreatedAt)).ToList();
+        return list.Select(s => new StudentResponse(s.Id, s.Name, s.Belt, s.Degrees, s.IsActive, s.CreatedAt)).ToList();
     }
 
     public async Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request)
     {
         var student = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Student {id} not found.");
         student.Name = request.Name;
+        student.IsActive = request.IsActive;
         await _repo.UpdateAsync(student);
-        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.IsActive, student.CreatedAt);
     }
 
     public async Task<StudentResponse> PromoteStudentAsync(Guid id, PromoteStudentRequest request)
@@ -209,13 +215,137 @@ public class StudentService : IStudentService
         }
 
         await _repo.UpdateAsync(student);
-        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.IsActive, student.CreatedAt);
+    }
+
+    public async Task<StudentPaymentStatusResponse> IsActiveAndPaidAsync(Guid id)
+    {
+        var student = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Student {id} not found.");
+        var memberships = await _membershipRepo.GetByStudentIdAsync(id);
+
+        var hasOpenDebt = memberships.Any(m => m.Status is MembershipStatus.PENDING or MembershipStatus.OVERDUE);
+        return new StudentPaymentStatusResponse(student.Id, student.Name, student.IsActive && !hasOpenDebt);
+    }
+
+    public async Task<List<StudentResponse>> GetStudentsWithOverdueMembershipsAsync()
+    {
+        var students = await _repo.GetStudentsWithOverdueMembershipsAsync();
+        return students.Select(s => new StudentResponse(s.Id, s.Name, s.Belt, s.Degrees, s.IsActive, s.CreatedAt)).ToList();
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var deleted = await _repo.DeleteAsync(id);
         if (!deleted) throw new KeyNotFoundException($"Student {id} not found.");
+    }
+}
+
+public class MembershipService : IMembershipService
+{
+    private readonly IMembershipRepository _repo;
+    private readonly IStudentRepository _studentRepo;
+
+    public MembershipService(IMembershipRepository repo, IStudentRepository studentRepo)
+    {
+        _repo = repo;
+        _studentRepo = studentRepo;
+    }
+
+    public async Task<MembershipResponse> CreateAsync(CreateMembershipRequest request)
+    {
+        var student = await _studentRepo.GetByIdAsync(request.StudentId)
+            ?? throw new KeyNotFoundException($"Student {request.StudentId} not found.");
+
+        var membership = new Membership
+        {
+            Id = Guid.NewGuid(),
+            StudentId = request.StudentId,
+            DueDate = request.DueDate.Date,
+            Amount = request.Amount,
+            Status = MembershipStatus.PENDING
+        };
+
+        await _repo.CreateAsync(membership);
+        return new MembershipResponse(membership.Id, student.Id, student.Name, membership.DueDate, membership.PaymentDate, membership.Amount, membership.Status, membership.CreatedAt);
+    }
+
+    public async Task<List<MembershipResponse>> GetAllAsync()
+    {
+        var memberships = await _repo.GetAllAsync();
+        return memberships.Select(m => new MembershipResponse(m.Id, m.StudentId, m.Student.Name, m.DueDate, m.PaymentDate, m.Amount, m.Status, m.CreatedAt)).ToList();
+    }
+
+    public async Task<MembershipResponse> GetByIdAsync(Guid id)
+    {
+        var membership = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Membership {id} not found.");
+        return new MembershipResponse(membership.Id, membership.StudentId, membership.Student.Name, membership.DueDate, membership.PaymentDate, membership.Amount, membership.Status, membership.CreatedAt);
+    }
+
+    public async Task<List<MembershipResponse>> GetByStudentIdAsync(Guid studentId)
+    {
+        var list = await _repo.GetByStudentIdAsync(studentId);
+        return list.Select(m => new MembershipResponse(m.Id, m.StudentId, m.Student.Name, m.DueDate, m.PaymentDate, m.Amount, m.Status, m.CreatedAt)).ToList();
+    }
+
+    public async Task<MembershipResponse> UpdateAsync(Guid id, UpdateMembershipRequest request)
+    {
+        var membership = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Membership {id} not found.");
+
+        membership.DueDate = request.DueDate.Date;
+        membership.PaymentDate = request.PaymentDate;
+        membership.Amount = request.Amount;
+        membership.Status = request.Status;
+
+        if (membership.PaymentDate.HasValue && membership.Status == MembershipStatus.PENDING)
+        {
+            membership.Status = MembershipStatus.PAID;
+        }
+
+        await _repo.UpdateAsync(membership);
+        return new MembershipResponse(membership.Id, membership.StudentId, membership.Student.Name, membership.DueDate, membership.PaymentDate, membership.Amount, membership.Status, membership.CreatedAt);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deleted = await _repo.DeleteAsync(id);
+        if (!deleted) throw new KeyNotFoundException($"Membership {id} not found.");
+    }
+
+    public async Task<int> GenerateCurrentMonthForActiveStudentsAsync(GenerateMonthlyMembershipsRequest request)
+    {
+        var now = DateTime.UtcNow;
+        var students = await _studentRepo.GetAllAsync();
+        var activeStudents = students.Where(s => s.IsActive).ToList();
+
+        var dueDay = Math.Clamp(request.DueDay, 1, DateTime.DaysInMonth(now.Year, now.Month));
+        var dueDate = new DateTime(now.Year, now.Month, dueDay);
+
+        var generated = 0;
+        foreach (var student in activeStudents)
+        {
+            var exists = await _repo.ExistsByStudentAndMonthAsync(student.Id, now.Year, now.Month);
+            if (exists)
+            {
+                continue;
+            }
+
+            await _repo.CreateAsync(new Membership
+            {
+                Id = Guid.NewGuid(),
+                StudentId = student.Id,
+                DueDate = dueDate,
+                Amount = request.Amount,
+                Status = MembershipStatus.PENDING
+            });
+            generated += 1;
+        }
+
+        return generated;
+    }
+
+    public async Task<int> RefreshOverdueStatusesAsync()
+    {
+        return await _repo.UpdateOverdueStatusesAsync(DateTime.UtcNow.Date);
     }
 }
 

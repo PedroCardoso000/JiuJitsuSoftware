@@ -32,7 +32,21 @@ public interface IStudentService
     Task<List<StudentResponse>> GetAllAsync();
     Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request);
     Task<StudentResponse> PromoteStudentAsync(Guid id, PromoteStudentRequest request);
+    Task<StudentPaymentStatusResponse> IsActiveAndPaidAsync(Guid id);
+    Task<List<StudentResponse>> GetStudentsWithOverdueMembershipsAsync();
     Task DeleteAsync(Guid id);
+}
+
+public interface IMembershipService
+{
+    Task<MembershipResponse> CreateAsync(CreateMembershipRequest request);
+    Task<List<MembershipResponse>> GetAllAsync();
+    Task<MembershipResponse> GetByIdAsync(Guid id);
+    Task<List<MembershipResponse>> GetByStudentIdAsync(Guid studentId);
+    Task<MembershipResponse> UpdateAsync(Guid id, UpdateMembershipRequest request);
+    Task DeleteAsync(Guid id);
+    Task<int> GenerateCurrentMonthForActiveStudentsAsync(GenerateMonthlyMembershipsRequest request);
+    Task<int> RefreshOverdueStatusesAsync();
 }
 
 public interface IAttendanceService
