@@ -1,0 +1,15 @@
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\bin\Debug\net10.0\TrinityJiuJitsu.Application.deps.json
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\bin\Debug\net10.0\TrinityJiuJitsu.Application.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\bin\Debug\net10.0\TrinityJiuJitsu.Application.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\bin\Debug\net10.0\TrinityJiuJitsu.Domain.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\bin\Debug\net10.0\TrinityJiuJitsu.Domain.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.csproj.AssemblyReference.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.AssemblyInfoInputs.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.AssemblyInfo.cs
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.csproj.CoreCompileInputs.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJ.6501B827.Up2Date
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\refint\TrinityJiuJitsu.Application.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\ref\TrinityJiuJitsu.Application.dll

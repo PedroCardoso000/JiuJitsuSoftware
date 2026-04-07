@@ -1,0 +1,17 @@
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Infrastructure.deps.json
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Infrastructure.runtimeconfig.json
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Infrastructure.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Infrastructure.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Domain.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\bin\Debug\net10.0\TrinityJiuJitsu.Domain.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.AssemblyInfo.cs
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJ.8AA411C8.Up2Date
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\refint\TrinityJiuJitsu.Infrastructure.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.pdb
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\TrinityJiuJitsu.Infrastructure.genruntimeconfig.cache
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Infrastructure\obj\Debug\net10.0\ref\TrinityJiuJitsu.Infrastructure.dll
