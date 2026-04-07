@@ -1,5 +1,13 @@
 namespace TrinityJiuJitsu.Domain.Entities;
 
+public enum MembershipStatus
+{
+    PENDING = 0,
+    PAID = 1,
+    OVERDUE = 2,
+    CANCELLED = 3
+}
+
 public class Gym
 {
     public Guid Id { get; set; }
@@ -38,9 +46,24 @@ public class Student
     public string Name { get; set; } = string.Empty;
     public string Belt { get; set; } = "Branca";
     public int Degrees { get; set; }
+    public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
+    public ICollection<Membership> Memberships { get; set; } = new List<Membership>();
+}
+
+public class Membership
+{
+    public Guid Id { get; set; }
+    public Guid StudentId { get; set; }
+    public DateTime DueDate { get; set; }
+    public DateTime? PaymentDate { get; set; }
+    public decimal Amount { get; set; }
+    public MembershipStatus Status { get; set; } = MembershipStatus.PENDING;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public Student Student { get; set; } = null!;
 }
 
 public class Attendance

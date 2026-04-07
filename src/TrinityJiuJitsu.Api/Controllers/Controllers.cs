@@ -107,6 +107,16 @@ public class StudentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
 
+    [HttpGet("overdue")]
+    public async Task<IActionResult> GetStudentsWithOverdueMemberships() => Ok(await _service.GetStudentsWithOverdueMembershipsAsync());
+
+    [HttpGet("{id:guid}/is-active-and-paid")]
+    public async Task<IActionResult> IsActiveAndPaid(Guid id)
+    {
+        try { return Ok(await _service.IsActiveAndPaidAsync(id)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(CreateStudentRequest request)
     {
@@ -135,6 +145,73 @@ public class StudentsController : ControllerBase
     {
         try { await _service.DeleteAsync(id); return NoContent(); }
         catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+}
+
+[ApiController]
+[Route("api/[controller]")]
+public class MembershipsController : ControllerBase
+{
+    private readonly IMembershipService _service;
+
+    public MembershipsController(IMembershipService service)
+    {
+        _service = service;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll() => Ok(await _service.GetAllAsync());
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        try { return Ok(await _service.GetByIdAsync(id)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpGet("by-student/{studentId:guid}")]
+    public async Task<IActionResult> GetByStudent(Guid studentId) => Ok(await _service.GetByStudentIdAsync(studentId));
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateMembershipRequest request)
+    {
+        try
+        {
+            var result = await _service.CreateAsync(request);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { error = ex.Message });
+        }
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateMembershipRequest request)
+    {
+        try { return Ok(await _service.UpdateAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try { await _service.DeleteAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpPost("generate-current-month")]
+    public async Task<IActionResult> GenerateCurrentMonth(GenerateMonthlyMembershipsRequest request)
+    {
+        var generated = await _service.GenerateCurrentMonthForActiveStudentsAsync(request);
+        return Ok(new { generated });
+    }
+
+    [HttpPost("refresh-overdue")]
+    public async Task<IActionResult> RefreshOverdue()
+    {
+        var updated = await _service.RefreshOverdueStatusesAsync();
+        return Ok(new { updated });
     }
 }
 

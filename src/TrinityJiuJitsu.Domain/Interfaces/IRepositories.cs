@@ -36,6 +36,19 @@ public interface IStudentRepository
     Task<Student?> GetByIdAsync(Guid id);
     Task<Student> UpdateAsync(Student student);
     Task<bool> DeleteAsync(Guid id);
+    Task<List<Student>> GetStudentsWithOverdueMembershipsAsync();
+}
+
+public interface IMembershipRepository
+{
+    Task<Membership> CreateAsync(Membership membership);
+    Task<List<Membership>> GetAllAsync();
+    Task<Membership?> GetByIdAsync(Guid id);
+    Task<List<Membership>> GetByStudentIdAsync(Guid studentId);
+    Task<Membership> UpdateAsync(Membership membership);
+    Task<bool> DeleteAsync(Guid id);
+    Task<bool> ExistsByStudentAndMonthAsync(Guid studentId, int year, int month);
+    Task<int> UpdateOverdueStatusesAsync(DateTime referenceDate);
 }
 
 public interface IAttendanceRepository

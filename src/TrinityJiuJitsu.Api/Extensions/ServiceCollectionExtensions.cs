@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBranchRepository, BranchRepository>();
         services.AddScoped<ITrainingClassRepository, TrainingClassRepository>();
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IMembershipRepository, MembershipRepository>();
         services.AddScoped<IAttendanceRepository, AttendanceRepository>();
 
         // Services
@@ -21,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<ITrainingClassService, TrainingClassService>();
         services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<IMembershipService, MembershipService>();
         services.AddScoped<IAttendanceService, AttendanceService>();
 
         return services;
