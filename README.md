@@ -2,6 +2,27 @@
 
 API para gerenciamento de academia de Jiu-Jitsu — Clean Architecture com .NET 9 + EF Core + SQLite.
 
+## Configuração de ambiente (Docker Compose + credenciais JSON)
+
+1. Copie os arquivos de exemplo:
+
+```bash
+cp .env.example .env
+cp credentials/db-credentials.json.example credentials/db-credentials.json
+```
+
+2. Ajuste as credenciais no `.env` e no `credentials/db-credentials.json`.
+
+3. Suba o SQL Server com Docker Compose:
+
+```bash
+docker compose up -d sqlserver
+```
+
+O arquivo `credentials/db-credentials.json` é montado no container em:
+
+`/run/secrets/db-credentials.json`
+
 ## Rodar
 
 ```bash

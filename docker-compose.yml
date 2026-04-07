@@ -4,13 +4,16 @@ services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
+    env_file:
+      - .env
     environment:
-      ACCEPT_EULA: "Y"
-      SA_PASSWORD: "YourStrong!Pass123"
+      ACCEPT_EULA: ${ACCEPT_EULA}
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
     ports:
-      - "1433:1433"
+      - "${MSSQL_PORT}:1433"
     volumes:
       - sql_data:/var/opt/mssql
+      - ./credentials/db-credentials.json:/run/secrets/db-credentials.json:ro
 
 volumes:
   sql_data:
