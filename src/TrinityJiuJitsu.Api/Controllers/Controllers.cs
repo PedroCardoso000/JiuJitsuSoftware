@@ -20,6 +20,20 @@ public class GymsController : ControllerBase
         var result = await _service.CreateAsync(request);
         return CreatedAtAction(nameof(GetAll), new { id = result.Id }, result);
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateGymRequest request)
+    {
+        try { return Ok(await _service.UpdateAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try { await _service.DeleteAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
 }
 
 [ApiController]
@@ -38,6 +52,20 @@ public class BranchesController : ControllerBase
         try { return CreatedAtAction(nameof(GetByGym), new { gymId = request.GymId }, await _service.CreateAsync(request)); }
         catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
     }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateBranchRequest request)
+    {
+        try { return Ok(await _service.UpdateAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try { await _service.DeleteAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
 }
 
 [ApiController]
@@ -53,6 +81,20 @@ public class ClassesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CreateClassRequest request) =>
         CreatedAtAction(nameof(GetByBranch), new { branchId = request.BranchId }, await _service.CreateAsync(request));
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateClassRequest request)
+    {
+        try { return Ok(await _service.UpdateAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try { await _service.DeleteAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
 }
 
 [ApiController]
@@ -70,6 +112,20 @@ public class StudentsController : ControllerBase
     {
         var result = await _service.CreateAsync(request);
         return CreatedAtAction(nameof(GetAll), new { id = result.Id }, result);
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Update(Guid id, UpdateStudentRequest request)
+    {
+        try { return Ok(await _service.UpdateAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        try { await _service.DeleteAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
     }
 }
 
