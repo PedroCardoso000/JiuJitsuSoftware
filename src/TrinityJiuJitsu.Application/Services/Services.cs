@@ -22,6 +22,20 @@ public class GymService : IGymService
         var gyms = await _repo.GetAllAsync();
         return gyms.Select(g => new GymResponse(g.Id, g.Name, g.CreatedAt)).ToList();
     }
+
+    public async Task<GymResponse> UpdateAsync(Guid id, UpdateGymRequest request)
+    {
+        var gym = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Gym {id} not found.");
+        gym.Name = request.Name;
+        await _repo.UpdateAsync(gym);
+        return new GymResponse(gym.Id, gym.Name, gym.CreatedAt);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deleted = await _repo.DeleteAsync(id);
+        if (!deleted) throw new KeyNotFoundException($"Gym {id} not found.");
+    }
 }
 
 public class BranchService : IBranchService
@@ -44,6 +58,25 @@ public class BranchService : IBranchService
     {
         var list = await _repo.GetByGymIdAsync(gymId);
         return list.Select(b => new BranchResponse(b.Id, b.Name, b.GymId, b.CreatedAt)).ToList();
+    }
+
+    public async Task<BranchResponse> UpdateAsync(Guid id, UpdateBranchRequest request)
+    {
+        var branch = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Branch {id} not found.");
+
+        var gym = await _gymRepo.GetByIdAsync(request.GymId)
+            ?? throw new KeyNotFoundException($"Gym {request.GymId} not found.");
+
+        branch.Name = request.Name;
+        branch.GymId = gym.Id;
+        await _repo.UpdateAsync(branch);
+        return new BranchResponse(branch.Id, branch.Name, branch.GymId, branch.CreatedAt);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deleted = await _repo.DeleteAsync(id);
+        if (!deleted) throw new KeyNotFoundException($"Branch {id} not found.");
     }
 }
 
@@ -71,6 +104,25 @@ public class TrainingClassService : ITrainingClassService
         var list = await _repo.GetByBranchIdAsync(branchId);
         return list.Select(c => new ClassResponse(c.Id, c.Name, c.Date, c.BranchId, c.CreatedAt)).ToList();
     }
+
+    public async Task<ClassResponse> UpdateAsync(Guid id, UpdateClassRequest request)
+    {
+        var trainingClass = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Class {id} not found.");
+        var branch = await _branchRepo.GetByIdAsync(request.BranchId)
+            ?? throw new KeyNotFoundException($"Branch {request.BranchId} not found.");
+
+        trainingClass.Name = request.Name;
+        trainingClass.Date = request.Date;
+        trainingClass.BranchId = branch.Id;
+        await _repo.UpdateAsync(trainingClass);
+        return new ClassResponse(trainingClass.Id, trainingClass.Name, trainingClass.Date, trainingClass.BranchId, trainingClass.CreatedAt);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deleted = await _repo.DeleteAsync(id);
+        if (!deleted) throw new KeyNotFoundException($"Class {id} not found.");
+    }
 }
 
 public class StudentService : IStudentService
@@ -89,6 +141,20 @@ public class StudentService : IStudentService
     {
         var list = await _repo.GetAllAsync();
         return list.Select(s => new StudentResponse(s.Id, s.Name, s.CreatedAt)).ToList();
+    }
+
+    public async Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request)
+    {
+        var student = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Student {id} not found.");
+        student.Name = request.Name;
+        await _repo.UpdateAsync(student);
+        return new StudentResponse(student.Id, student.Name, student.CreatedAt);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var deleted = await _repo.DeleteAsync(id);
+        if (!deleted) throw new KeyNotFoundException($"Student {id} not found.");
     }
 }
 
