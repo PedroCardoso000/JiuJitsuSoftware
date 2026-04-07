@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TrinityJiuJitsu.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2066ce491ab16058b4fb2a6d0cf9f4cb26ec3c4d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0f17ace6f2e19f30d242a000e9f9af89522a9ba")]
 [assembly: System.Reflection.AssemblyProductAttribute("TrinityJiuJitsu.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TrinityJiuJitsu.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

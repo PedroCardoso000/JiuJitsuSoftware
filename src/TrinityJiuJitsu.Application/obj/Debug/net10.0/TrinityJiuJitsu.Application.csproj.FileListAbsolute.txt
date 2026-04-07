@@ -13,3 +13,4 @@ C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\Tri
 C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\refint\TrinityJiuJitsu.Application.dll
 C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.pdb
 C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\ref\TrinityJiuJitsu.Application.dll
+C:\Users\wwwpe\OneDrive\Documentos\Projetos\trinity\net-back\TrinityJiuJitsu\TrinityJiuJitsu\src\TrinityJiuJitsu.Application\obj\Debug\net10.0\TrinityJiuJitsu.Application.sourcelink.json
