@@ -36,6 +36,8 @@ public class Student
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+    public string Belt { get; set; } = "Branca";
+    public int Degrees { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();

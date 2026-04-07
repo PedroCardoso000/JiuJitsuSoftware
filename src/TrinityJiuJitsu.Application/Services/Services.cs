@@ -127,6 +127,9 @@ public class TrainingClassService : ITrainingClassService
 
 public class StudentService : IStudentService
 {
+    private static readonly string[] BeltHierarchy = ["Branca", "Azul", "Roxa", "Marrom", "Preta"];
+    private const int MaxDegreesPerBelt = 4;
+
     private readonly IStudentRepository _repo;
     public StudentService(IStudentRepository repo) => _repo = repo;
 
@@ -134,13 +137,13 @@ public class StudentService : IStudentService
     {
         var student = new Student { Id = Guid.NewGuid(), Name = request.Name };
         await _repo.CreateAsync(student);
-        return new StudentResponse(student.Id, student.Name, student.CreatedAt);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
     }
 
     public async Task<List<StudentResponse>> GetAllAsync()
     {
         var list = await _repo.GetAllAsync();
-        return list.Select(s => new StudentResponse(s.Id, s.Name, s.CreatedAt)).ToList();
+        return list.Select(s => new StudentResponse(s.Id, s.Name, s.Belt, s.Degrees, s.CreatedAt)).ToList();
     }
 
     public async Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request)
@@ -148,7 +151,65 @@ public class StudentService : IStudentService
         var student = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Student {id} not found.");
         student.Name = request.Name;
         await _repo.UpdateAsync(student);
-        return new StudentResponse(student.Id, student.Name, student.CreatedAt);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
+    }
+
+    public async Task<StudentResponse> PromoteStudentAsync(Guid id, PromoteStudentRequest request)
+    {
+        var student = await _repo.GetByIdAsync(id) ?? throw new KeyNotFoundException($"Student {id} not found.");
+        var currentBeltIndex = Array.IndexOf(BeltHierarchy, student.Belt);
+        if (currentBeltIndex < 0)
+        {
+            throw new InvalidOperationException($"Current belt '{student.Belt}' does not exist in belt hierarchy.");
+        }
+
+        if (request.Action == "add_degree")
+        {
+            if (student.Belt == "Preta")
+            {
+                throw new InvalidOperationException("Belt 'Preta' follows dan progression and cannot use add_degree.");
+            }
+
+            if (student.Degrees >= MaxDegreesPerBelt)
+            {
+                throw new InvalidOperationException($"Student already has {MaxDegreesPerBelt} degrees. Use change_belt to promote to the next belt.");
+            }
+
+            student.Degrees += 1;
+        }
+        else if (request.Action == "change_belt")
+        {
+            if (string.IsNullOrWhiteSpace(request.TargetBelt))
+            {
+                throw new ArgumentException("TargetBelt is required when action is change_belt.");
+            }
+
+            var targetBeltIndex = Array.IndexOf(BeltHierarchy, request.TargetBelt);
+            if (targetBeltIndex < 0)
+            {
+                throw new InvalidOperationException($"Target belt '{request.TargetBelt}' does not exist in belt hierarchy.");
+            }
+
+            if (targetBeltIndex != currentBeltIndex + 1)
+            {
+                throw new InvalidOperationException($"Invalid belt sequence. Student can only move from '{student.Belt}' to '{(currentBeltIndex + 1 < BeltHierarchy.Length ? BeltHierarchy[currentBeltIndex + 1] : "no next belt")}'.");
+            }
+
+            if (student.Belt != "Preta" && student.Degrees < MaxDegreesPerBelt)
+            {
+                throw new InvalidOperationException($"Student must have {MaxDegreesPerBelt} degrees before changing belt.");
+            }
+
+            student.Belt = request.TargetBelt;
+            student.Degrees = 0;
+        }
+        else
+        {
+            throw new ArgumentException("Invalid action. Use 'add_degree' or 'change_belt'.");
+        }
+
+        await _repo.UpdateAsync(student);
+        return new StudentResponse(student.Id, student.Name, student.Belt, student.Degrees, student.CreatedAt);
     }
 
     public async Task DeleteAsync(Guid id)

@@ -121,6 +121,15 @@ public class StudentsController : ControllerBase
         catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
     }
 
+    [HttpPost("{id:guid}/promote")]
+    public async Task<IActionResult> Promote(Guid id, PromoteStudentRequest request)
+    {
+        try { return Ok(await _service.PromoteStudentAsync(id, request)); }
+        catch (KeyNotFoundException ex) { return NotFound(new { error = ex.Message }); }
+        catch (InvalidOperationException ex) { return BadRequest(new { error = ex.Message }); }
+        catch (ArgumentException ex) { return BadRequest(new { error = ex.Message }); }
+    }
+
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {

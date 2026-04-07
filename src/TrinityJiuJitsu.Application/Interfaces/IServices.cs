@@ -31,6 +31,7 @@ public interface IStudentService
     Task<StudentResponse> CreateAsync(CreateStudentRequest request);
     Task<List<StudentResponse>> GetAllAsync();
     Task<StudentResponse> UpdateAsync(Guid id, UpdateStudentRequest request);
+    Task<StudentResponse> PromoteStudentAsync(Guid id, PromoteStudentRequest request);
     Task DeleteAsync(Guid id);
 }
 
