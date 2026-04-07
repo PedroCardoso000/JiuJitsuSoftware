@@ -39,6 +39,8 @@ public class AppDbContext : DbContext
         {
             e.HasKey(x => x.Id);
             e.Property(x => x.Name).IsRequired().HasMaxLength(200);
+            e.Property(x => x.Belt).IsRequired().HasMaxLength(20);
+            e.Property(x => x.Degrees).IsRequired();
         });
 
         modelBuilder.Entity<Attendance>(e =>
